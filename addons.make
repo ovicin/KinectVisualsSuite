@@ -1,0 +1,8 @@
+ofxKinect
+ofxOpenCv
+ofxXmlSettings
+ofxMSACore-master
+ofxMSAFluid-master
+ofxMSAInteractiveObject-master
+ofxPostProcessing-master
+ofxSimpleGuiToo-master
