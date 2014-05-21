@@ -17,68 +17,10 @@ float tuioYScaler = 1;
 //--------------------------------------------------------------
 FireTrails::FireTrails()
 {
-    
-//    for(int i=0; i<strlen(sz); i++) sz[i] += 20;
-//	
-//	// setup fluid stuff
-//	fluidSolver.setup(100, 100);
-//    //fluidSolver.enableRGB(true).setFadeSpeed(0.002).setDeltaT(0.5).setVisc(0.00015).setColorDiffusion(0);
-//    fluidSolver.enableRGB(true).setFadeSpeed(0.1).setDeltaT(0.5).setVisc(0.000005);
-//	fluidDrawer.setup(&fluidSolver);
-//	
-//	fluidCellsX			= 150;
-//	
-//	drawFluid			= true;
-//	drawParticles		= true;
-//	
-//	ofSetFrameRate(60);
-//	ofBackground(0, 0, 0);
-//	ofSetVerticalSync(false);
-//	
-//#ifdef USE_TUIO
-//	tuioClient.start(3333);
-//#endif
-//    
-//	
-//#ifdef USE_GUI
-//	gui.addSlider("fluidCellsX", fluidCellsX, 20, 400);
-//	gui.addButton("resizeFluid", resizeFluid);
-//    gui.addSlider("colorMult", colorMult, 0, 100);
-//    gui.addSlider("velocityMult", velocityMult, 0, 100);
-//	gui.addSlider("fs.viscocity", fluidSolver.viscocity, 0.0, 0.01);
-//	gui.addSlider("fs.colorDiffusion", fluidSolver.colorDiffusion, 0.0, 0.0003);
-//	gui.addSlider("fs.fadeSpeed", fluidSolver.fadeSpeed, 0.0, 0.1);
-//	gui.addSlider("fs.solverIterations", fluidSolver.solverIterations, 1, 50);
-//	gui.addSlider("fs.deltaT", fluidSolver.deltaT, 0.1, 5);
-//	gui.addComboBox("fd.drawMode", (int&)fluidDrawer.drawMode, msa::fluid::getDrawModeTitles());
-//	gui.addToggle("fs.doRGB", fluidSolver.doRGB);
-//	gui.addToggle("fs.doVorticityConfinement", fluidSolver.doVorticityConfinement);
-//	gui.addToggle("drawFluid", drawFluid);
-//	gui.addToggle("drawParticles", drawParticles);
-//	gui.addToggle("fs.wrapX", fluidSolver.wrap_x);
-//	gui.addToggle("fs.wrapY", fluidSolver.wrap_y);
-//    gui.addSlider("tuioXScaler", tuioXScaler, 0, 2);
-//    gui.addSlider("tuioYScaler", tuioYScaler, 0, 2);
-//    
-//	gui.currentPage().setXMLName("ofxMSAFluidSettings.xml");
-//    gui.loadFromXML();
-//	gui.setDefaultKeys(true);
-//	gui.setAutoSave(true);
-//    gui.show();
-//#endif
-//	
-//    //windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
-//	pMouse = msa::getWindowCenter();
-//	resizeFluid			= true;
-//	
-//	ofEnableAlphaBlending();
-//	ofSetBackgroundAuto(false);
+    init();
 }
 
-
-
-
-void FireTrails::setup() {
+void FireTrails::init(){
     char sz[] = "[Rd9?-2XaUP0QY[hO%9QTYQ`-W`QZhcccYQY[`b";
     
 	for(int i=0; i<strlen(sz); i++) sz[i] += 20;
@@ -92,10 +34,6 @@ void FireTrails::setup() {
 	
 	drawFluid			= true;
 	drawParticles		= true;
-	
-	ofSetFrameRate(60);
-	ofBackground(0, 0, 0);
-	ofSetVerticalSync(false);
 	
 #ifdef USE_TUIO
 	tuioClient.start(3333);
@@ -132,8 +70,15 @@ void FireTrails::setup() {
     //windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
 	pMouse = msa::getWindowCenter();
 	resizeFluid			= true;
-	
-	ofEnableAlphaBlending();
+}
+
+
+void FireTrails::setup() {
+    ofSetFrameRate(60);
+	ofBackground(0, 0, 0);
+	ofSetVerticalSync(false);
+    
+    ofEnableAlphaBlending();
 	ofSetBackgroundAuto(false);
 }
 

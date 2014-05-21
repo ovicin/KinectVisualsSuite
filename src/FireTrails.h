@@ -33,6 +33,7 @@ class FireTrails{
 public:
     FireTrails();
     
+    void init();
 	void setup();
 	void update();
 	void draw();
