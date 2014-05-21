@@ -34,9 +34,9 @@ public:
     FireTrails();
     
     void init();
-	void setup();
-	void update();
-	void draw();
+	void fireSetup();
+	void fireUpdate();
+	void fireDraw();
 	
 	void keyPressed  (int key);
 	void mouseMoved(int x, int y );

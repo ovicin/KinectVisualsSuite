@@ -79,7 +79,7 @@ public:
     void drawNeonTrails();
     
     int threshold = 50;
-    int motionThresh = 1;
+    int motionThresh = 5;
     int updateCounter = 0;
     ofxCvGrayscaleImage depthImg;
     ofImage neonImg;

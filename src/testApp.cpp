@@ -6,12 +6,12 @@ void testApp::setup(){
     kinectSetup();
     
     programType = kProgramTypeNeonTrails;
-    fireTrails = FireTrails();      // this calls its init method
+    //fireTrails = FireTrails();      // this calls its init method
     neonInit();
     
     switch (programType) {
         case kProgramTypeFireTrails:
-            fireTrails.setup();
+            fireTrails.fireSetup();
             break;
         case kProgramTypeNeonTrails:
             neonSetup();
@@ -27,7 +27,7 @@ void testApp::update(){
     switch (programType) {
         case kProgramTypeFireTrails:
             kinectUpdate();
-            fireTrails.update();
+            fireTrails.fireUpdate();
             break;
         case kProgramTypeNeonTrails:
             kinectUpdate();
@@ -42,7 +42,7 @@ void testApp::update(){
 void testApp::draw(){
     switch (programType) {
         case kProgramTypeFireTrails:
-            fireTrails.draw();
+            fireTrails.fireDraw();
             break;
         case kProgramTypeNeonTrails:
             drawNeonTrails();
@@ -71,10 +71,11 @@ void testApp::keyPressed(int key){
     switch (key) {
         case '1':
             programType = kProgramTypeNeonTrails;
+            neonSetup();
             break;
         case '2':
             programType = kProgramTypeFireTrails;
-            fireTrails.setup();
+            fireTrails.fireSetup();
             break;
             
         case OF_KEY_UP:
@@ -273,8 +274,8 @@ void testApp::neonSetup()
 {
     ofEnableAlphaBlending();
     ofSetBackgroundAuto(false);
-    ofBackground(125, 25, 190);
-    ofSetFrameRate(30);
+    ofBackground(125, 225, 190);
+    ofSetFrameRate(60);
     
     nearThreshold = 230;
 	farThreshold = 70;
@@ -361,7 +362,7 @@ void testApp::addFireForces()
                         ofVec2f pos = ofVec2f(posX,posY) / ofGetWindowSize();
                         
                         //up *= -1;
-                        ofVec2f vel = ofVec2f(0, -0.005) / ofGetWindowSize();
+                        ofVec2f vel = ofVec2f(0, -0.005 * ofRandom(50)) / ofGetWindowSize();
                         
                         fireTrails.addToFluid(pos, vel, true, true);
                         //void addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce);
@@ -440,7 +441,8 @@ void testApp::drawNeonTrails(){
         //ofSetColor(c);
         //ofRect(10, 20, 400, 300);
         
-        neonImg.draw(10, 20, 400, 300);
+        //neonImg.draw(10, 20, 400, 300);
+        neonImg.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
         
         //neonImg.draw(10, 20, 400, 300);
         
