@@ -2,20 +2,19 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    programType = kProgramTypeNeonTrails;
     
-    fireTrails = FireTrails();
-    fireTrails.setup();
+    kinectSetup();
+    
+    programType = kProgramTypeNeonTrails;
+    fireTrails = FireTrails();      // this calls its init method
+    neonInit();
     
     switch (programType) {
         case kProgramTypeFireTrails:
-            //fireTrails = FireTrails();
-            //fireTrails.setup();
+            fireTrails.setup();
             break;
         case kProgramTypeNeonTrails:
-            kinectSetup();
-//            neonTrails = NeonTrails();
-//            neonTrails.setup();
+            neonSetup();
             break;
         default:
             break;
@@ -75,6 +74,7 @@ void testApp::keyPressed(int key){
             break;
         case '2':
             programType = kProgramTypeFireTrails;
+            fireTrails.setup();
             break;
             
         case OF_KEY_UP:
@@ -148,10 +148,23 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 }
 
 /****************     KINECT FUNCTIONS    ****************/
+
+void testApp::kinectImgInit()
+{
+    depthImg.allocate(kinect.width, kinect.height);
+    
+    for(int i = 0; i<prevFramesMax; i++){
+        prevFrames.push_back(ofxCvGrayscaleImage(depthImg));
+    }
+    
+    // May not need these imgs
+    colorImg.allocate(kinect.width, kinect.height);
+	grayImage.allocate(kinect.width, kinect.height);
+	grayThreshNear.allocate(kinect.width, kinect.height);
+	grayThreshFar.allocate(kinect.width, kinect.height);
+}
+
 void testApp::kinectSetup(){
-    ofEnableAlphaBlending();
-    ofSetBackgroundAuto(false);
-    ofBackground(123, 0, 200);
     
     // enable depth->video image calibration
 	kinect.setRegistration(true);
@@ -162,7 +175,6 @@ void testApp::kinectSetup(){
 	
 	kinect.open();		// opens first available kinect
 	//kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
-	//kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
 	
 	// print the intrinsic IR sensor values
 	if(kinect.isConnected()) {
@@ -176,19 +188,10 @@ void testApp::kinectSetup(){
 	kinect2.init();
 	kinect2.open();
 #endif
-	
-	colorImg.allocate(kinect.width, kinect.height);
-	grayImage.allocate(kinect.width, kinect.height);
-	grayThreshNear.allocate(kinect.width, kinect.height);
-	grayThreshFar.allocate(kinect.width, kinect.height);
     
-    neonImg.allocate(kinect.width, kinect.height, OF_IMAGE_COLOR_ALPHA);
-	
-	nearThreshold = 230;
+    nearThreshold = 230;
 	farThreshold = 70;
 	bThreshWithOpenCV = true;
-	
-	ofSetFrameRate(30);
 	
 	// zero the tilt on startup
 	angle = 0;
@@ -197,14 +200,7 @@ void testApp::kinectSetup(){
 	// start from the front
 	bDrawPointCloud = false;
     
-    setupTrails();
-    
-    //    ofColor c(255);
-    //    //ofBackground(c);
-    //
-    //    ofSetColor(c);
-    //    ofRect(10, 20, 400, 300);
-
+    kinectImgInit();
 }
 
 void testApp::kinectUpdate(){
@@ -253,12 +249,11 @@ void testApp::kinectUpdate(){
             addFireForces();
             break;
         case kProgramTypeNeonTrails:
-            updateTrailsImg();
+            updateNeonImg();
             break;
         default:
             break;
     }
-    updateTrailsImg();
     
 #ifdef USE_TWO_KINECTS
 	kinect2.update();
@@ -269,14 +264,21 @@ void testApp::kinectUpdate(){
 
 /***************     NEON TRAILS FUNCTIONS     ***********/
 
-void testApp::setupTrails()
+void testApp::neonInit()
 {
-    depthImg.allocate(kinect.width, kinect.height);
-    trailsImg.allocate(kinect.width, kinect.height);
+    neonImg.allocate(kinect.width, kinect.height, OF_IMAGE_COLOR_ALPHA);
+}
+
+void testApp::neonSetup()
+{
+    ofEnableAlphaBlending();
+    ofSetBackgroundAuto(false);
+    ofBackground(125, 25, 190);
+    ofSetFrameRate(30);
     
-    for(int i = 0; i<prevFramesMax; i++){
-        prevFrames.push_back(ofxCvGrayscaleImage(depthImg));
-    }
+    nearThreshold = 230;
+	farThreshold = 70;
+	bThreshWithOpenCV = true;
 }
 
 void testApp::updateDepthImg()      // this is more of a gen kinect func
@@ -372,7 +374,7 @@ void testApp::addFireForces()
 }
 
 
-void testApp::updateTrailsImg()
+void testApp::updateNeonImg()
 {
     if(prevFrames.size() == prevFramesMax);
     {
@@ -411,37 +413,8 @@ void testApp::updateTrailsImg()
             }
         }
         neonImg.update();
-        //neonImg.setFromPixels(neonPix, neonImg.getWidth(), neonImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
-        //ofColor c = ofColor(255);
-        //neonImg.setColor(c);
-        
-        
-        
-        //neonImg.setFromPixels(neonPix, neonImg.getWidth(), neonImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
-        
-        
-        
-        //        for(int i = 0; i < numPixels; i++)
-        //        {
-        //            unsigned char *rgbPix;
-        //            if(abs(prevPix[i] - pix[i]) > motionThresh)
-        //            {
-        //                trailsPix[3*i] = 255;
-        //                trailsPix[3*i + 1] = 30;
-        //                trailsPix[3*i + 2] = 128;
-        //            }
-        //            else
-        //            {
-        //                trailsPix[3*i] = 0;
-        //                trailsPix[3*i + 1] = 0;
-        //                trailsPix[3*i + 2] = 0;
-        //                //trailsPix[i] = 0;
-        //            }
-        //        }
-        //        trailsImg.flagImageChanged();
     }
 }
-
 
 void testApp::drawNeonTrails(){
     
@@ -470,9 +443,6 @@ void testApp::drawNeonTrails(){
         neonImg.draw(10, 20, 400, 300);
         
         //neonImg.draw(10, 20, 400, 300);
-        //trailsImg.draw(10, 10, 400, 300);
-        
-        
         
         depthImg.draw(420, 320, 400, 300);
 		

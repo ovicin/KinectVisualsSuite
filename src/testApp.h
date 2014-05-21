@@ -41,6 +41,12 @@ public:
    // NeonTrails neonTrails;
     
 /************    KINECT  STUFF  ******************/
+    void kinectSetup();
+    void kinectImgInit();
+    void kinectUpdate();
+    void updateDepthImg();
+    void updatePrevFrames();
+
     ofxKinect kinect;
 
 #ifdef USE_TWO_KINECTS
@@ -66,20 +72,16 @@ public:
     
 /************   NEON TRAILS   ******************/
     
-    void setupTrails();
-    void updateDepthImg();
-    void updatePrevFrames();
-    void updateTrailsImg();
+    void neonInit();
+    void neonSetup();
+    void updateNeonImg();
     
     void drawNeonTrails();
-    void kinectUpdate();
-    void kinectSetup();
     
     int threshold = 50;
     int motionThresh = 1;
     int updateCounter = 0;
     ofxCvGrayscaleImage depthImg;
-    ofxCvColorImage trailsImg;
     ofImage neonImg;
     vector< ofxCvGrayscaleImage > prevFrames;
     int prevFramesCounter = 0;
