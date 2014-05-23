@@ -20,6 +20,8 @@
 
 #include "ofMain.h"
 
+#include "ofxPostProcessing.h"
+
 // comment this line out if you don't wanna use the GUI
 // you will need ofxSimpleGuiToo, ofxMSAInteractiveObject & ofxXmlSettings
 // if you don't use the GUI, you won't be able to see the fluid parameters
@@ -31,6 +33,14 @@
 
 class FireTrails{
 public:
+    
+    enum kColor{
+        kColorFire,
+        kColorBlue,
+        kColorPurple,
+        kColorMax
+    };
+    
     FireTrails();
     
     void init();
@@ -51,6 +61,7 @@ public:
 	bool                    resizeFluid;
 	bool                    drawFluid;
 	bool                    drawParticles;
+    kColor                  colorMode;
 	
 	msa::fluid::Solver      fluidSolver;
 	msa::fluid::DrawerGl	fluidDrawer;
@@ -63,4 +74,7 @@ public:
 	ofxTuioClient tuioClient;
 #endif
 	
+    /************** SHADERS  ***************/
+    ofxPostProcessing post;
+    ofLight light;
 };

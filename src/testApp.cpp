@@ -23,18 +23,20 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-    
-    switch (programType) {
-        case kProgramTypeFireTrails:
-            kinectUpdate();
-            fireTrails.fireUpdate();
-            break;
-        case kProgramTypeNeonTrails:
-            kinectUpdate();
-//            neonTrails.update();
-            break;
-        default:
-            break;
+    if(!hidden)
+    {
+        switch (programType) {
+            case kProgramTypeFireTrails:
+                kinectUpdate();
+                fireTrails.fireUpdate();
+                break;
+            case kProgramTypeNeonTrails:
+                kinectUpdate();
+    //            neonTrails.update();
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -45,7 +47,10 @@ void testApp::draw(){
             fireTrails.fireDraw();
             break;
         case kProgramTypeNeonTrails:
-            drawNeonTrails();
+            if(!hidden)
+                drawNeonTrails();
+            //else
+              //  ofBackground(0);
 //            neonTrails.draw();
             break;
         default:
@@ -56,28 +61,18 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-//    switch (programType) {
-//        case kProgramTypeFireTrails:
-//            programType = kProgramTypeNeonTrails;
-//            //fireTrails.keyPressed(key);
-//            break;
-//        case kProgramTypeNeonTrails:
-//            programType = kProgramTypeFireTrails;
-////            neonTrails.keyPressed(key);
-//            break;
-//        default:
-//            break;
-//    }
+
     switch (key) {
         case '1':
             programType = kProgramTypeNeonTrails;
+                glPopAttrib();
             neonSetup();
             break;
         case '2':
             programType = kProgramTypeFireTrails;
             fireTrails.fireSetup();
             break;
-            
+
         case OF_KEY_UP:
             //			angle++;
             //			if(angle>30) angle=30;
@@ -98,10 +93,47 @@ void testApp::keyPressed(int key){
 
     }
     
+    switch (programType) {
+        case kProgramTypeFireTrails:
+            fireTrails.keyPressed(key);
+            break;
+        case kProgramTypeNeonTrails:
+            neonKeyPressed(key);
+            break;
+        default:
+            break;
+    }
+    
 }
+
+void testApp::neonKeyPressed(int key)
+{
+    switch (key) {
+        case 'h':
+            overlayHidden = !overlayHidden;
+            break;
+        case OF_KEY_RETURN:
+            hidden = true;
+            //ofBackground(0);
+            break;
+        default:
+            break;
+    }
+    
+}
+
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
+    switch (key) {
+        case OF_KEY_RETURN:
+            hidden = false;
+            //ofBackground(0);
+            break;
+            
+        default:
+            break;
+    }
     
 }
 
@@ -351,7 +383,7 @@ void testApp::addFireForces()
                     if(counter++ % spacing == 0)
                     {
                        int posX = x*(ofGetWindowWidth()/depthImg.getWidth());
-                       int posY = y*(ofGetWindowHeight()/depthImg.getHeight());
+                       int posY = (depthImg.getHeight() - y)*(ofGetWindowHeight()/depthImg.getHeight());
                         
                        // int posX = x*(depthImg.getWidth()/ofGetWindowWidth());
                        // int posY = y*(depthImg.getHeight()/ofGetWindowHeight());
@@ -428,25 +460,20 @@ void testApp::drawNeonTrails(){
 	} else {
 		// draw from the live kinect
 		//kinect.drawDepth(10, 10, 400, 300);
-		kinect.draw(420, 20, 400, 300);
-		
-		grayImage.draw(10, 320, 400, 300);
-		contourFinder.draw(10, 320, 400, 300);
+        if(!overlayHidden)
+        {
+            kinect.draw(420, 20, 400, 300);
+            
+            grayImage.draw(10, 320, 400, 300);
+            contourFinder.draw(10, 320, 400, 300);
+            
+            depthImg.draw(420, 320, 400, 300);
+        }
         
-        
-        
-        //  ofColor c(0);
-        //ofBackground(c);
-        
-        //ofSetColor(c);
-        //ofRect(10, 20, 400, 300);
-        
-        //neonImg.draw(10, 20, 400, 300);
         neonImg.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
         
         //neonImg.draw(10, 20, 400, 300);
         
-        depthImg.draw(420, 320, 400, 300);
 		
 #ifdef USE_TWO_KINECTS
 		kinect2.draw(420, 320, 400, 300);
@@ -454,31 +481,34 @@ void testApp::drawNeonTrails(){
 	}
 	
 	// draw instructions
-	ofSetColor(255, 255, 255);
-	stringstream reportStream;
-    
-    if(kinect.hasAccelControl()) {
-        reportStream << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
-        << ofToString(kinect.getMksAccel().y, 2) << " / "
-        << ofToString(kinect.getMksAccel().z, 2) << endl;
-    } else {
-        reportStream << "Note: this is a newer Xbox Kinect or Kinect For Windows device," << endl
-		<< "motor / led / accel controls are not currently supported" << endl << endl;
+    if(!overlayHidden)
+    {
+        ofSetColor(255, 255, 255);
+        stringstream reportStream;
+        
+        if(kinect.hasAccelControl()) {
+            reportStream << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
+            << ofToString(kinect.getMksAccel().y, 2) << " / "
+            << ofToString(kinect.getMksAccel().z, 2) << endl;
+        } else {
+            reportStream << "Note: this is a newer Xbox Kinect or Kinect For Windows device," << endl
+            << "motor / led / accel controls are not currently supported" << endl << endl;
+        }
+        
+        reportStream << "press p to switch between images and point cloud, rotate the point cloud with the mouse" << endl
+        << "using opencv threshold = " << bThreshWithOpenCV <<" (press spacebar)" << endl
+        << "set near threshold " << nearThreshold << " (press: + -)" << endl
+        << "set far threshold " << farThreshold << " (press: < >) num blobs found " << contourFinder.nBlobs
+        << ", fps: " << ofGetFrameRate() << endl
+        << "press c to close the connection and o to open it again, connection is: " << kinect.isConnected() << endl;
+        
+        if(kinect.hasCamTiltControl()) {
+            reportStream << "press UP and DOWN to change the tilt angle: " << angle << " degrees" << endl
+            << "press 1-5 & 0 to change the led mode" << endl;
+        }
+        
+        ofDrawBitmapString(reportStream.str(), 20, 652);
     }
-    
-	reportStream << "press p to switch between images and point cloud, rotate the point cloud with the mouse" << endl
-	<< "using opencv threshold = " << bThreshWithOpenCV <<" (press spacebar)" << endl
-	<< "set near threshold " << nearThreshold << " (press: + -)" << endl
-	<< "set far threshold " << farThreshold << " (press: < >) num blobs found " << contourFinder.nBlobs
-	<< ", fps: " << ofGetFrameRate() << endl
-	<< "press c to close the connection and o to open it again, connection is: " << kinect.isConnected() << endl;
-    
-    if(kinect.hasCamTiltControl()) {
-    	reportStream << "press UP and DOWN to change the tilt angle: " << angle << " degrees" << endl
-        << "press 1-5 & 0 to change the led mode" << endl;
-    }
-    
-	ofDrawBitmapString(reportStream.str(), 20, 652);
     
 }
 

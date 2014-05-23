@@ -18,6 +18,9 @@ float tuioYScaler = 1;
 FireTrails::FireTrails()
 {
     ofLog(OF_LOG_NOTICE, "FireTrails instance being created ");
+    
+    colorMode = kColorFire;
+    
 #ifdef USE_GUI
 	gui.addSlider("fluidCellsX", fluidCellsX, 20, 400);
 	gui.addButton("resizeFluid", resizeFluid);
@@ -45,6 +48,19 @@ FireTrails::FireTrails()
     gui.show();
 #endif
 
+    
+    post.init(ofGetWidth(), ofGetHeight());
+    post.createPass<FxaaPass>()->setEnabled(true);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<DofPass>()->setEnabled(false);
+    post.createPass<KaleidoscopePass>()->setEnabled(false);
+    post.createPass<NoiseWarpPass>()->setEnabled(false);
+    post.createPass<PixelatePass>()->setEnabled(false);
+    post.createPass<EdgePass>()->setEnabled(false);
+    post.createPass<VerticalTiltShifPass>()->setEnabled(false);
+    post.createPass<GodRaysPass>()->setEnabled(true);
+
+    light.setPosition(1000, 1000, 1000);
     
     //init();
    // setup();
@@ -119,7 +135,9 @@ void FireTrails::fireSetup() {
 
 	ofSetFrameRate(60);
 	ofBackground(0, 0, 0);
-	ofSetVerticalSync(false);
+    ofSetVerticalSync(true);
+//	ofSetVerticalSync(false);
+    ofSetCoordHandedness(OF_RIGHT_HANDED);
 
 #ifdef USE_TUIO
 	tuioClient.start(3333);
@@ -191,10 +209,22 @@ void FireTrails::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addFor
 		if(addColor) {
             //			Color drawColor(CM_HSV, (getElapsedFrames() % 360) / 360.0f, 1, 1);
 			ofColor drawColor;
-            if((ofGetFrameNum() + (int)ofRandom(5)) % 5 == 0)
-                drawColor.setHsb( 5 , 255, 255);
-            else
-                drawColor.setHsb( 0, 255, 255);
+            
+            switch (colorMode) {
+                case kColorFire:
+                    if((ofGetFrameNum() + (int)ofRandom(5)) % 5 == 0)
+                        drawColor.setHsb( 5 , 255, 255);
+                    else
+                        drawColor.setHsb( 0, 255, 255);
+                    break;
+                case kColorBlue:
+                    drawColor.setHsb((ofGetFrameNum()/100) % 3 + 240, 255, 255);
+                    break;
+                    
+                default:
+                    break;
+            }
+
             //drawColor.setHsb(ofGetFrameNum() % 2 , 255, 255);
 			//drawColor.setHsb((ofGetFrameNum() % 255), 255, 255);
 			
@@ -245,17 +275,29 @@ void FireTrails::fireUpdate(){
 }
 
 void FireTrails::fireDraw(){
-	if(drawFluid) {
-        ofClear(0);
-		glColor3f(1, 1, 1);
-		fluidDrawer.draw(0, 0, ofGetWidth(), ofGetHeight());
-	} else {
-        //		if(ofGetFrameNum()%5==0)
-        fadeToColor(0, 0, 0, 0.01);
-	}
-	if(drawParticles)
-		particleSystem.updateAndDraw(fluidSolver, ofGetWindowSize(), drawFluid);
-	
+//    // copy enable part of gl state
+//    glPushAttrib(GL_ENABLE_BIT);
+//    
+//    // setup gl state
+//    glEnable(GL_DEPTH_TEST);
+//    glEnable(GL_CULL_FACE);
+    light.enable();
+    
+    // begin scene to post process
+    post.begin();
+    
+        if(drawFluid) {
+            ofClear(0);
+            glColor3f(1, 1, 1);
+            fluidDrawer.draw(0, 0, ofGetWidth(), ofGetHeight());
+        } else {
+            //		if(ofGetFrameNum()%5==0)
+            fadeToColor(0, 0, 0, 0.01);
+        }
+        if(drawParticles)
+            particleSystem.updateAndDraw(fluidSolver, ofGetWindowSize(), drawFluid);
+    post.end();
+//    glPopAttrib();
     //	ofDrawBitmapString(sz, 50, 50);
     
 #ifdef USE_GUI
@@ -266,21 +308,38 @@ void FireTrails::fireDraw(){
 
 void FireTrails::keyPressed  (int key){
     switch(key) {
-		case '1':
-			fluidDrawer.setDrawMode(msa::fluid::kDrawColor);
-			break;
-            
-		case '2':
-			fluidDrawer.setDrawMode(msa::fluid::kDrawMotion);
-			break;
-            
-		case '3':
-			fluidDrawer.setDrawMode(msa::fluid::kDrawSpeed);
-			break;
-			
-		case '4':
-			fluidDrawer.setDrawMode(msa::fluid::kDrawVectors);
-			break;
+//		case '1':
+//			fluidDrawer.setDrawMode(msa::fluid::kDrawColor);
+//			break;
+//            
+//		case '2':
+//			fluidDrawer.setDrawMode(msa::fluid::kDrawMotion);
+//			break;
+//            
+//		case '3':
+//			fluidDrawer.setDrawMode(msa::fluid::kDrawSpeed);
+//			break;
+//			
+//		case '4':
+//			fluidDrawer.setDrawMode(msa::fluid::kDrawVectors);
+//			break;
+        
+        case 'c':
+            switch (colorMode) {
+                case kColorFire:
+                    colorMode = kColorBlue;
+                    break;
+                case kColorBlue:
+                    colorMode = kColorPurple;
+                    break;
+                case kColorPurple:
+                    colorMode = kColorFire;
+                    break;
+                default:
+                    colorMode = kColorFire;
+                    break;
+            }
+            break;
             
 		case 'd':
 			drawFluid ^= true;
@@ -314,7 +373,7 @@ void FireTrails::keyPressed  (int key){
 
 //--------------------------------------------------------------
 void FireTrails::mouseMoved(int x, int y){
-	ofVec2f eventPos = ofVec2f(x, y);
+	ofVec2f eventPos = ofVec2f(x, ofGetWindowHeight() - y);
 	ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
 	ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
 	addToFluid(mouseNorm, mouseVel, true, true);

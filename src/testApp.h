@@ -75,6 +75,7 @@ public:
     void neonInit();
     void neonSetup();
     void updateNeonImg();
+    void neonKeyPressed(int key);
     
     void drawNeonTrails();
     
@@ -89,6 +90,9 @@ public:
     unsigned char trail = 30;
     int camW = 640;
     int camH = 480;
+    
+    bool hidden = false;
+    bool overlayHidden = true;
     
     
     
