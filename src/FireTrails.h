@@ -38,6 +38,7 @@ public:
         kColorFire,
         kColorBlue,
         kColorPurple,
+        kColorMulti,
         kColorMax
     };
     
@@ -61,6 +62,8 @@ public:
 	bool                    resizeFluid;
 	bool                    drawFluid;
 	bool                    drawParticles;
+    float                   fireForce = 0.005;
+    float                   fireForceInc = 0.0005;
     kColor                  colorMode;
 	
 	msa::fluid::Solver      fluidSolver;

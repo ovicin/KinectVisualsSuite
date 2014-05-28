@@ -81,6 +81,7 @@ public:
     
     int threshold = 50;
     int motionThresh = 5;
+    //int motionThresh = 10;
     int updateCounter = 0;
     ofxCvGrayscaleImage depthImg;
     ofImage neonImg;

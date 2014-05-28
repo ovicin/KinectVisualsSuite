@@ -116,6 +116,12 @@ void testApp::neonKeyPressed(int key)
             hidden = true;
             //ofBackground(0);
             break;
+        case OF_KEY_LEFT:
+            ++trail;
+            break;
+        case OF_KEY_RIGHT:
+            --trail;
+            break;
         default:
             break;
     }
@@ -371,7 +377,7 @@ void testApp::addFireForces()
         
         //int numPixels = depthImg.getWidth() * depthImg.getHeight();
         int counter = 0;
-        int spacing = 25;
+        int spacing = 30;
         int up = 1;
         for(int y = 0; y < depthImg.getHeight(); y++)
         {
@@ -394,8 +400,9 @@ void testApp::addFireForces()
                         ofVec2f pos = ofVec2f(posX,posY) / ofGetWindowSize();
                         
                         //up *= -1;
-                        ofVec2f vel = ofVec2f(0, -0.005 * ofRandom(50)) / ofGetWindowSize();
-                        
+//                        ofVec2f vel = ofVec2f(0, 0.005 * ofRandom(50)) / ofGetWindowSize();
+                        ofVec2f vel = ofVec2f(0, fireTrails.fireForce * ofRandom(50)) / ofGetWindowSize();
+
                         fireTrails.addToFluid(pos, vel, true, true);
                         //void addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce);
                     }

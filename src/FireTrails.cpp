@@ -45,7 +45,7 @@ FireTrails::FireTrails()
     gui.loadFromXML();
 	gui.setDefaultKeys(true);
 	gui.setAutoSave(true);
-    gui.show();
+    //gui.show();
 #endif
 
     
@@ -58,7 +58,7 @@ FireTrails::FireTrails()
     post.createPass<PixelatePass>()->setEnabled(false);
     post.createPass<EdgePass>()->setEnabled(false);
     post.createPass<VerticalTiltShifPass>()->setEnabled(false);
-    post.createPass<GodRaysPass>()->setEnabled(true);
+    post.createPass<GodRaysPass>()->setEnabled(false);
 
     light.setPosition(1000, 1000, 1000);
     
@@ -110,7 +110,7 @@ void FireTrails::init(){
     gui.loadFromXML();
 	gui.setDefaultKeys(true);
 	gui.setAutoSave(true);
-    gui.show();
+    //gui.show();
 #endif
 	
     //windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
@@ -218,7 +218,13 @@ void FireTrails::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addFor
                         drawColor.setHsb( 0, 255, 255);
                     break;
                 case kColorBlue:
-                    drawColor.setHsb((ofGetFrameNum()/100) % 3 + 240, 255, 255);
+                    drawColor.setHsb((ofGetFrameNum()/100) % 10 + 220, 255, 255);
+                    break;
+                case kColorPurple:
+                    drawColor.setHsb((ofGetFrameNum()/100) % 10 + 280, 255, 255);
+                    break;
+                case kColorMulti:
+                    drawColor.setHsb((ofGetFrameNum()/300) % 360 , 255, 255);
                     break;
                     
                 default:
@@ -323,6 +329,18 @@ void FireTrails::keyPressed  (int key){
 //		case '4':
 //			fluidDrawer.setDrawMode(msa::fluid::kDrawVectors);
 //			break;
+        case OF_KEY_RIGHT:
+            fireForce += fireForceInc;
+            break;
+        
+        case OF_KEY_LEFT:
+            fireForce -= fireForceInc;
+            break;
+        case 'w':
+            fireForce = 0.005;
+            break;
+        case 's':
+            fireForce = -0.005;
         
         case 'c':
             switch (colorMode) {
@@ -333,6 +351,9 @@ void FireTrails::keyPressed  (int key){
                     colorMode = kColorPurple;
                     break;
                 case kColorPurple:
+                    colorMode = kColorMulti;
+                    break;
+                case kColorMulti:
                     colorMode = kColorFire;
                     break;
                 default:
