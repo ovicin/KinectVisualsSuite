@@ -63,6 +63,7 @@
 		DE541285192995800041D297 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE541280192995800041D297 /* Particle.cpp */; };
 		DE541286192995800041D297 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE541282192995800041D297 /* ParticleSystem.cpp */; };
 		DE54128A192996430041D297 /* NeonTrails.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE541288192996430041D297 /* NeonTrails.cpp */; };
+		DEFD9B121936AE1400C6BF8B /* ColorBG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEFD9B101936AE1400C6BF8B /* ColorBG.cpp */; };
 		E04E24FB23DAC5EE7439F32C /* ofxSimpleGuiToo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CC8B6419CBB306FCBF4DDD7 /* ofxSimpleGuiToo.cpp */; };
 		E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A16CBF2E8CFE43AF54FE6F5 /* ofxCvHaarFinder.cpp */; };
 		E313A604B6DE780F45D2CEB9 /* ofxSimpleGuiToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9CEDE925CA52882C686D31 /* ofxSimpleGuiToggle.cpp */; };
@@ -322,6 +323,8 @@
 		DE541289192996430041D297 /* NeonTrails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeonTrails.h; sourceTree = "<group>"; };
 		DEA2EDC0AFD59176FDEDC222 /* ofxCvShortImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxCvShortImage.h; path = ../../../addons/ofxOpenCv/src/ofxCvShortImage.h; sourceTree = SOURCE_ROOT; };
 		DEED3EB4E18E52F8AFD7ED9B /* HorizontalTiltShifPass.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = HorizontalTiltShifPass.cpp; path = "../../../addons/ofxPostProcessing-master/src/HorizontalTiltShifPass.cpp"; sourceTree = SOURCE_ROOT; };
+		DEFD9B101936AE1400C6BF8B /* ColorBG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorBG.cpp; sourceTree = "<group>"; };
+		DEFD9B111936AE1400C6BF8B /* ColorBG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorBG.h; sourceTree = "<group>"; };
 		DF850E8BEB254E311903B7C5 /* MSAFluidDrawerGl-Cinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "MSAFluidDrawerGl-Cinder.h"; path = "../../../addons/ofxMSAFluid-master/src/MSAFluidDrawerGl-Cinder.h"; sourceTree = SOURCE_ROOT; };
 		DFCAF4F0EB9CD5C294584253 /* ofxSimpleGuiQuadWarp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSimpleGuiQuadWarp.cpp; path = "../../../addons/ofxSimpleGuiToo-master/src/Controls/ofxSimpleGuiQuadWarp.cpp"; sourceTree = SOURCE_ROOT; };
 		E14D3EF03E140F5604900412 /* tracking.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tracking.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/video/tracking.hpp; sourceTree = SOURCE_ROOT; };
@@ -974,6 +977,15 @@
 			name = NeonTrails;
 			sourceTree = "<group>";
 		};
+		DEFD9B0F1936ADB500C6BF8B /* ColorBG */ = {
+			isa = PBXGroup;
+			children = (
+				DEFD9B101936AE1400C6BF8B /* ColorBG.cpp */,
+				DEFD9B111936AE1400C6BF8B /* ColorBG.h */,
+			);
+			name = ColorBG;
+			sourceTree = "<group>";
+		};
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1007,6 +1019,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				DEFD9B0F1936ADB500C6BF8B /* ColorBG */,
 				DE541287192996340041D297 /* NeonTrails */,
 				DE54127D1929956B0041D297 /* FireTrails */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -1188,6 +1201,7 @@
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
+				DEFD9B121936AE1400C6BF8B /* ColorBG.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
 				DE54128A192996430041D297 /* NeonTrails.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
