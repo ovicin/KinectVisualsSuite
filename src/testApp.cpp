@@ -85,6 +85,18 @@ void testApp::keyPressed(int key){
         case '0':
             programType = kProgramTypeColorBG;
             break;
+        
+        case ',':
+            angle--;
+            if(angle<-30) angle=-30;
+                kinect.setCameraTiltAngle(angle);
+            break;
+        case '.':
+            angle++;
+            if(angle>30) angle=30;
+                kinect.setCameraTiltAngle(angle);
+            break;
+            
 
         case OF_KEY_UP:
             //			angle++;
