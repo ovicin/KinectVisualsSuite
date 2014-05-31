@@ -22,6 +22,16 @@ public:
     void draw();
     
     void keyPressed(int key);
+    bool isImageMode;
+    
+    
+    /**** Image Stuff ****/
+    vector<ofImage> imgVec;
+    ofImage image;
+    int imgIndex;
+    
+    
+    /**** Color Stuff *****/
     
     ofColor getNextColor();
     
