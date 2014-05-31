@@ -23,6 +23,10 @@ public:
     
     void keyPressed(int key);
     
+    ofColor getNextColor();
+    
+    int darkness;
+    bool isChangingColor;
     ofColor color;
     
 };

@@ -28,12 +28,17 @@ void testApp::update(){
         switch (programType) {
             case kProgramTypeFireTrails:
                 kinectUpdate();
+                addFireForces();
                 fireTrails.fireUpdate();
                 break;
             case kProgramTypeNeonTrails:
                 kinectUpdate();
+                updateNeonImg();
     //            neonTrails.update();
                 break;
+            
+            case kProgramTypeColorBG:
+                colorBG.update();
             default:
                 break;
         }
@@ -107,6 +112,9 @@ void testApp::keyPressed(int key){
             break;
         case kProgramTypeNeonTrails:
             neonKeyPressed(key);
+            break;
+        case kProgramTypeColorBG:
+            colorBG.keyPressed(key);
             break;
         default:
             break;
@@ -302,16 +310,16 @@ void testApp::kinectUpdate(){
 	}
 	
     updateDepthImg();
-    switch (programType) {
-        case kProgramTypeFireTrails:
-            addFireForces();
-            break;
-        case kProgramTypeNeonTrails:
-            updateNeonImg();
-            break;
-        default:
-            break;
-    }
+//    switch (programType) {
+//        case kProgramTypeFireTrails:
+//            addFireForces();
+//            break;
+//        case kProgramTypeNeonTrails:
+//            updateNeonImg();
+//            break;
+//        default:
+//            break;
+//    }
     
 #ifdef USE_TWO_KINECTS
 	kinect2.update();

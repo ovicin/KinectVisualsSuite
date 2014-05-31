@@ -955,6 +955,13 @@
 			name = libs;
 			sourceTree = "<group>";
 		};
+		DE37CB6F193A4F8E00E54C71 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		DE54127D1929956B0041D297 /* FireTrails */ = {
 			isa = PBXGroup;
 			children = (
@@ -1019,6 +1026,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				DE37CB6F193A4F8E00E54C71 /* Assets */,
 				DEFD9B0F1936ADB500C6BF8B /* ColorBG */,
 				DE541287192996340041D297 /* NeonTrails */,
 				DE54127D1929956B0041D297 /* FireTrails */,
