@@ -209,26 +209,26 @@ void FireTrails::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addFor
 		if(addColor) {
             //			Color drawColor(CM_HSV, (getElapsedFrames() % 360) / 360.0f, 1, 1);
 			ofColor drawColor;
-            
+            float hsbNum;
             switch (colorMode) {
                 case kColorFire:
-                    if((ofGetFrameNum() + (int)ofRandom(5)) % 5 == 0)
-                        drawColor.setHsb( 5 , 255, 255);
-                    else
-                        drawColor.setHsb( 0, 255, 255);
+                    hsbNum = ofRandom(0.3);
+                    drawColor.setHsb(hsbNum, 255, 255);
                     break;
                 case kColorBlue:
-                    drawColor.setHsb((ofGetFrameNum()/100) % 10 + 220, 255, 255);
+                    hsbNum = ofRandom(0.5) + 169.6;
+                    drawColor.setHsb( hsbNum, 255, 255);
                     break;
                 case kColorPurple:
-                    drawColor.setHsb((ofGetFrameNum()/100) % 10 + 280, 255, 255);
-                    break;
-                case kColorMulti:
-                    drawColor.setHsb((ofGetFrameNum()/300) % 360 , 255, 255);
+                    hsbNum = ofRandom(0.4) + 170;
+                    drawColor.setHsb( hsbNum, 255, 255);
                     break;
                     
-                default:
-                    break;
+//                case kColorMulti:
+//                {
+//                    drawColor.setHsb((ofGetFrameNum()/300) % 360 , 255, 255);
+//                    break;
+//                }
             }
 
             //drawColor.setHsb(ofGetFrameNum() % 2 , 255, 255);
@@ -351,7 +351,7 @@ void FireTrails::keyPressed  (int key){
                     colorMode = kColorPurple;
                     break;
                 case kColorPurple:
-                    colorMode = kColorMulti;
+                    colorMode = kColorFire;
                     break;
                 case kColorMulti:
                     colorMode = kColorFire;
