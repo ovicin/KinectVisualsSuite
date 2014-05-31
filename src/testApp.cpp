@@ -36,6 +36,10 @@ void testApp::update(){
                 updateNeonImg();
     //            neonTrails.update();
                 break;
+            case kProgramTypeImgBG:
+                kinectUpdate();
+                updateNeonImg();
+                break;
             
             case kProgramTypeColorBG:
                 colorBG.update();
@@ -58,7 +62,9 @@ void testApp::draw(){
               //  ofBackground(0);
 //            neonTrails.draw();
             break;
-            
+        case kProgramTypeImgBG:
+            drawImgTrails();
+            break;
         case kProgramTypeColorBG:
             colorBG.draw();
             break;
@@ -78,10 +84,12 @@ void testApp::keyPressed(int key){
             neonSetup();
             break;
         case '2':
+            programType = kProgramTypeImgBG;
+            break;
+        case '3':
             programType = kProgramTypeFireTrails;
             fireTrails.fireSetup();
             break;
-            
         case '0':
             programType = kProgramTypeColorBG;
             break;
@@ -125,6 +133,9 @@ void testApp::keyPressed(int key){
         case kProgramTypeNeonTrails:
             neonKeyPressed(key);
             break;
+        case kProgramTypeImgBG:
+            imgBGKeyPressed(key);
+            break;
         case kProgramTypeColorBG:
             colorBG.keyPressed(key);
             break;
@@ -154,6 +165,21 @@ void testApp::neonKeyPressed(int key)
             break;
     }
     
+}
+
+void testApp::imgBGKeyPressed(int key)
+{
+    switch (key) {
+        case OF_KEY_LEFT:
+            (--colorBG.imgIndex) % colorBG.imgVec.size();
+            break;
+        case OF_KEY_RIGHT:
+            (++colorBG.imgIndex) % colorBG.imgVec.size();
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
@@ -384,6 +410,7 @@ void testApp::updateDepthImg()      // this is more of a gen kinect func
         }
 		
 		// update the cv images
+        depthImg.mirror(false, true);
 		depthImg.flagImageChanged();
 		
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
@@ -467,34 +494,72 @@ void testApp::updateNeonImg()
         
         unsigned char *neonPix = neonImg.getPixels();
         
-        int numPixels = depthImg.getWidth() * depthImg.getHeight();
+        ofColor c = getNeonColor();
         
+        int numPixels = depthImg.getWidth() * depthImg.getHeight();
         for(int i = 0; i < numPixels; i++)
         {
-            if(abs(prevPix[i] - pix[i]) > motionThresh && pix[i] != 0)
+            if(programType == kProgramTypeImgBG)
             {
-                //ofColor c(254, 30, 128, CHAR_MAX);
-                //neonImg.setColor(i, c);
-                ofColor c = getNeonColor();
-                
-                neonPix[4*i] = c.r;
-                neonPix[4*i + 1] = c.g;
-                neonPix[4*i + 2] = c.b;
-                neonPix[4*i + 3] = CHAR_MAX;
-//                neonPix[4*i] = 255;
-//                neonPix[4*i + 1] = 30;
-//                neonPix[4*i + 2] = 128;
-//                neonPix[4*i + 3] = CHAR_MAX;
+                if(abs(prevPix[i] - pix[i]) > motionThresh)
+                {
+                        neonPix[4*i] = 0;
+                        neonPix[4*i + 1] = 0;
+                        neonPix[4*i + 2] = 0;
+                        neonPix[4*i + 3] = CHAR_MAX;
+                    //                neonPix[4*i] = 255;
+                    //                neonPix[4*i + 1] = 30;
+                    //                neonPix[4*i + 2] = 128;
+                    //                neonPix[4*i + 3] = CHAR_MAX;
+                }
+                else
+                {
+                        neonPix[4*i] = 0;
+                        neonPix[4*i + 1] = 0;
+                        neonPix[4*i + 2] = 0;
+                        neonPix[4*i + 3] = 0;
+                }
             }
+
             else
             {
-                //ofColor c(0, 0, 0, trail);
-                //neonImg.setColor(i, c);
-                neonPix[4*i] = 0;
-                neonPix[4*i + 1] = 0;
-                neonPix[4*i + 2] = 0;
-                neonPix[4*i + 3] = trail;
-                //trailsPix[i] = 0;
+            
+                if(abs(prevPix[i] - pix[i]) > motionThresh && pix[i] != 0)
+                {
+                    //ofColor c(254, 30, 128, CHAR_MAX);
+                    //neonImg.setColor(i, c);
+                    if(programType == kProgramTypeImgBG)
+                    {
+                        neonPix[4*i] = 0;
+                        neonPix[4*i + 1] = 0;
+                        neonPix[4*i + 2] = 0;
+                        neonPix[4*i + 3] = CHAR_MAX;
+                    }
+                    else
+                    {
+                        neonPix[4*i] = c.r;
+                        neonPix[4*i + 1] = c.g;
+                        neonPix[4*i + 2] = c.b;
+                        neonPix[4*i + 3] = CHAR_MAX;
+                    }
+                }
+                else
+                {
+                    if(programType == kProgramTypeImgBG)
+                    {
+                        neonPix[4*i] = 0;
+                        neonPix[4*i + 1] = 0;
+                        neonPix[4*i + 2] = 0;
+                        neonPix[4*i + 3] = 0;
+                    }
+                    else
+                    {
+                        neonPix[4*i] = 0;
+                        neonPix[4*i + 1] = 0;
+                        neonPix[4*i + 2] = 0;
+                        neonPix[4*i + 3] = trail;
+                    }
+                }
             }
         }
         neonImg.update();
@@ -562,6 +627,13 @@ void testApp::drawNeonTrails(){
         ofDrawBitmapString(reportStream.str(), 20, 652);
     }
     
+}
+
+void testApp::drawImgTrails()
+{
+    colorBG.imgVec[colorBG.imgIndex].draw(0,0);
+    neonImg.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+    neonImg.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
 }
 
 void testApp::exit(){

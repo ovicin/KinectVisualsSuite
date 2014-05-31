@@ -109,6 +109,9 @@ public:
     vector< ofImage > imgVec;
     int imgIndex = 0;
     
+    void drawImgTrails();
+    void imgBGKeyPressed(int key);
+    
 
 /*******  ColorBG  ******/
     
