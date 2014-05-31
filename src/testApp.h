@@ -4,6 +4,7 @@
 #include "FireTrails.h"
 #include "ofxOpenCv.h"
 #include "ofxKinect.h"
+#include "ColorBG.h"
 //#include "NeonTrails.h"
 
 // uncomment this to read from two kinects simultaneously
@@ -15,7 +16,9 @@ public:
     
     enum kProgramType{
         kProgramTypeNeonTrails,
-        kProgramTypeFireTrails
+        kProgramTypeFireTrails,
+        kProgramTypeColorBG,
+        kProgramTypeImgBG
     };
     
 /**************** CORE FUNCTIONS ***************/
@@ -70,6 +73,10 @@ public:
     
     ofEasyCam easyCam;
     
+    
+/************ Colors ***********/
+    ofColor getNeonColor();
+    
 /************   NEON TRAILS   ******************/
     
     void neonInit();
@@ -94,8 +101,18 @@ public:
     
     bool hidden = false;
     bool overlayHidden = true;
+
     
     
+/**********   IMG  *********/
+    
+    vector< ofImage > imgVec;
+    int imgIndex = 0;
+    
+
+/*******  ColorBG  ******/
+    
+    ColorBG colorBG;
     
     
     

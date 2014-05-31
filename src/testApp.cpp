@@ -53,6 +53,10 @@ void testApp::draw(){
               //  ofBackground(0);
 //            neonTrails.draw();
             break;
+            
+        case kProgramTypeColorBG:
+            colorBG.draw();
+            break;
         default:
             break;
     }
@@ -71,6 +75,10 @@ void testApp::keyPressed(int key){
         case '2':
             programType = kProgramTypeFireTrails;
             fireTrails.fireSetup();
+            break;
+            
+        case '0':
+            programType = kProgramTypeColorBG;
             break;
 
         case OF_KEY_UP:
@@ -185,6 +193,17 @@ void testApp::gotMessage(ofMessage msg){
 void testApp::dragEvent(ofDragInfo dragInfo){
     
 }
+
+/*****************    COLOR FUNCTIONS    *****************/
+ofColor testApp::getNeonColor(){
+    float theta = (ofGetElapsedTimef()) / (20 * PI);
+    float r = abs(sin(theta)*255);
+    float g = abs(sin(theta + 2)*255);
+    float b = abs(sin(theta + 4)*255);
+    
+    return ofColor(r,g,b);
+}
+
 
 /****************     KINECT FUNCTIONS    ****************/
 
@@ -436,10 +455,16 @@ void testApp::updateNeonImg()
             {
                 //ofColor c(254, 30, 128, CHAR_MAX);
                 //neonImg.setColor(i, c);
-                neonPix[4*i] = 255;
-                neonPix[4*i + 1] = 30;
-                neonPix[4*i + 2] = 128;
+                ofColor c = getNeonColor();
+                
+                neonPix[4*i] = c.r;
+                neonPix[4*i + 1] = c.g;
+                neonPix[4*i + 2] = c.b;
                 neonPix[4*i + 3] = CHAR_MAX;
+//                neonPix[4*i] = 255;
+//                neonPix[4*i + 1] = 30;
+//                neonPix[4*i + 2] = 128;
+//                neonPix[4*i + 3] = CHAR_MAX;
             }
             else
             {
