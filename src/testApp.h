@@ -70,6 +70,7 @@ public:
     int nearThreshold;
 	int farThreshold;
 	int angle;
+    bool isMirror;
     
     ofEasyCam easyCam;
     

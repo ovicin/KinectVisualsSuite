@@ -84,11 +84,11 @@ void testApp::keyPressed(int key){
             neonSetup();
             break;
         case '2':
-            programType = kProgramTypeImgBG;
-            break;
-        case '3':
             programType = kProgramTypeFireTrails;
             fireTrails.fireSetup();
+            break;
+        case '3':
+            programType = kProgramTypeImgBG;
             break;
         case '0':
             programType = kProgramTypeColorBG;
@@ -105,6 +105,10 @@ void testApp::keyPressed(int key){
                 kinect.setCameraTiltAngle(angle);
             break;
             
+        case 'M':
+        case 'm':
+            isMirror = !isMirror;
+            break;
 
         case OF_KEY_UP:
             //			angle++;
@@ -119,6 +123,8 @@ void testApp::keyPressed(int key){
             //			if(angle<-30) angle=-30;
             //			kinect.setCameraTiltAngle(angle);
             threshold++;
+            if(threshold > 1000)
+                threshold = 100;
             cout << threshold;
             break;
         default:
@@ -242,7 +248,7 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 /*****************    COLOR FUNCTIONS    *****************/
 ofColor testApp::getNeonColor(){
-    float theta = (ofGetElapsedTimef()) / (20 * PI);
+    float theta = (ofGetElapsedTimef()) / (10 * PI);
     float r = abs(sin(theta)*255);
     float g = abs(sin(theta + 2)*255);
     float b = abs(sin(theta + 4)*255);
@@ -300,7 +306,8 @@ void testApp::kinectSetup(){
 	// zero the tilt on startup
 	angle = 0;
 	kinect.setCameraTiltAngle(angle);
-	
+    isMirror = false;
+    
 	// start from the front
 	bDrawPointCloud = false;
     
@@ -410,8 +417,9 @@ void testApp::updateDepthImg()      // this is more of a gen kinect func
         }
 		
 		// update the cv images
-        depthImg.mirror(false, true);
-		depthImg.flagImageChanged();
+//        depthImg.mirror(false, true);
+        depthImg.mirror(false, isMirror);
+        depthImg.flagImageChanged();
 		
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
 		// also, find holes is set to true so we will get interior contours as well....
