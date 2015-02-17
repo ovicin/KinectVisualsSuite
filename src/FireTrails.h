@@ -76,7 +76,15 @@ public:
 #ifdef USE_TUIO
 	ofxTuioClient tuioClient;
 #endif
-	
+    bool bo_0FxaaPass;
+    bool bo_1BloomPass;
+    bool bo_2ofPass;
+    bool bo_3KaleidoscopePass;
+    bool bo_4NoiseWarpPass;
+    bool bo_5PixelatePass;
+    bool bo_6EdgePass;
+    bool bo_7VerticalTiltShifPass;
+    bool bo_8GodRaysPass;
     /************** SHADERS  ***************/
     ofxPostProcessing post;
     ofLight light;

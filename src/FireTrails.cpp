@@ -40,8 +40,21 @@ FireTrails::FireTrails()
 	gui.addToggle("fs.wrapY", fluidSolver.wrap_y);
     gui.addSlider("tuioXScaler", tuioXScaler, 0, 2);
     gui.addSlider("tuioYScaler", tuioYScaler, 0, 2);
+    gui.currentPage().setXMLName("ofxMSAFluidSettings.xml");
+
+    gui.addPage();
     
-	gui.currentPage().setXMLName("ofxMSAFluidSettings.xml");
+    gui.addToggle("Shader FxaaPass", bo_0FxaaPass);
+    gui.addToggle("Shader BloomPass",bo_1BloomPass);
+    gui.addToggle("Shader ofPass",bo_2ofPass);
+    gui.addToggle("Shader KaleidoscopePass",bo_3KaleidoscopePass);
+    gui.addToggle("Shader NoiseWarpPass",bo_4NoiseWarpPass);
+    gui.addToggle("Shader PixelatePass",bo_5PixelatePass);
+    gui.addToggle("Shader EdgePass",bo_6EdgePass);
+    gui.addToggle("Shader VerticalTiltShifPass",bo_7VerticalTiltShifPass);
+    gui.addToggle("Shader GodRaysPass",bo_8GodRaysPass);
+    
+	
     gui.loadFromXML();
 	gui.setDefaultKeys(true);
 	gui.setAutoSave(true);
@@ -50,15 +63,15 @@ FireTrails::FireTrails()
 
     
     post.init(ofGetWidth(), ofGetHeight());
-    post.createPass<FxaaPass>()->setEnabled(true);
-    post.createPass<BloomPass>()->setEnabled(true);
-    post.createPass<DofPass>()->setEnabled(false);
-    post.createPass<KaleidoscopePass>()->setEnabled(false);
-    post.createPass<NoiseWarpPass>()->setEnabled(false);
-    post.createPass<PixelatePass>()->setEnabled(false);
-    post.createPass<EdgePass>()->setEnabled(false);
-    post.createPass<VerticalTiltShifPass>()->setEnabled(false);
-    post.createPass<GodRaysPass>()->setEnabled(false);
+    post.createPass<FxaaPass>()->setEnabled(true); bo_0FxaaPass = true;
+    post.createPass<BloomPass>()->setEnabled(true); bo_1BloomPass = true;
+    post.createPass<DofPass>()->setEnabled(false); bo_2ofPass = false;
+    post.createPass<KaleidoscopePass>()->setEnabled(false); bo_3KaleidoscopePass = false;
+    post.createPass<NoiseWarpPass>()->setEnabled(false); bo_4NoiseWarpPass = false;
+    post.createPass<PixelatePass>()->setEnabled(false); bo_5PixelatePass = false;
+    post.createPass<EdgePass>()->setEnabled(false); bo_6EdgePass = false;
+    post.createPass<VerticalTiltShifPass>()->setEnabled(false); bo_7VerticalTiltShifPass = false;
+    post.createPass<GodRaysPass>()->setEnabled(false); bo_8GodRaysPass = false;
 
     light.setPosition(1000, 1000, 1000);
     
@@ -290,6 +303,18 @@ void FireTrails::fireDraw(){
     light.enable();
     
     // begin scene to post process
+    
+    //check the effects that are enabled
+    post[0]->setEnabled(bo_0FxaaPass);
+    post[1]->setEnabled(bo_1BloomPass);
+    post[2]->setEnabled(bo_2ofPass);
+    post[3]->setEnabled(bo_3KaleidoscopePass);
+    post[4]->setEnabled(bo_4NoiseWarpPass);
+    post[5]->setEnabled(bo_5PixelatePass);
+    post[6]->setEnabled(bo_6EdgePass);
+    post[7]->setEnabled(bo_7VerticalTiltShifPass);
+    post[8]->setEnabled(bo_8GodRaysPass);
+    
     post.begin();
     
         if(drawFluid) {
@@ -387,6 +412,14 @@ void FireTrails::keyPressed  (int key){
             //			cout << ITERS << " iterations took " << timer.getSeconds() << " seconds." << std::endl;
 		}
 			break;
+        case 'h': {
+            gui.hide();
+        }
+            break;
+        case 'g':{
+            gui.show();
+        }
+            break;
 			
     }
 }

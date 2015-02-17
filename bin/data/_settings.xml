@@ -1,0 +1,38 @@
+<controls>
+    <Toggle_Shader_FxaaPass>
+        <name>Shader FxaaPass</name>
+        <value>1</value>
+    </Toggle_Shader_FxaaPass>
+    <Toggle_Shader_BloomPass>
+        <name>Shader BloomPass</name>
+        <value>1</value>
+    </Toggle_Shader_BloomPass>
+    <Toggle_Shader_ofPass>
+        <name>Shader ofPass</name>
+        <value>0</value>
+    </Toggle_Shader_ofPass>
+    <Toggle_Shader_KaleidoscopePass>
+        <name>Shader KaleidoscopePass</name>
+        <value>0</value>
+    </Toggle_Shader_KaleidoscopePass>
+    <Toggle_Shader_NoiseWarpPass>
+        <name>Shader NoiseWarpPass</name>
+        <value>0</value>
+    </Toggle_Shader_NoiseWarpPass>
+    <Toggle_Shader_PixelatePass>
+        <name>Shader PixelatePass</name>
+        <value>0</value>
+    </Toggle_Shader_PixelatePass>
+    <Toggle_Shader_EdgePass>
+        <name>Shader EdgePass</name>
+        <value>0</value>
+    </Toggle_Shader_EdgePass>
+    <Toggle_Shader_VerticalTiltShifPass>
+        <name>Shader VerticalTiltShifPass</name>
+        <value>0</value>
+    </Toggle_Shader_VerticalTiltShifPass>
+    <Toggle_Shader_GodRaysPass>
+        <name>Shader GodRaysPass</name>
+        <value>0</value>
+    </Toggle_Shader_GodRaysPass>
+</controls>
