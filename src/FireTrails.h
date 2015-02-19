@@ -56,6 +56,9 @@ public:
 	void fadeToColor(float r, float g, float b, float speed);
 	void addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce);
     
+    void resetParticleCount(void);
+    unsigned long getParticleCount(void);
+    
     float                   colorMult;
     float                   velocityMult;
 	int                     fluidCellsX;
@@ -71,6 +74,7 @@ public:
 	
 	ParticleSystem          particleSystem;
 	
+    unsigned long           particleCount;
 	ofVec2f                 pMouse;
 	
 #ifdef USE_TUIO
@@ -88,4 +92,7 @@ public:
     /************** SHADERS  ***************/
     ofxPostProcessing post;
     ofLight light;
+    
+    ofSoundPlayer sndPlayer;
+    int curSound;
 };

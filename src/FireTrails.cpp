@@ -14,6 +14,18 @@
 float tuioXScaler = 1;
 float tuioYScaler = 1;
 
+#define NO_SOUNDS 8
+string FILES[NO_SOUNDS]={
+    "sonidos/4211__dobroide__fire-crackling.mp3",
+    "sonidos/82296__kamikun__creepy-effects.wav",
+    "sonidos/167448__carmsie__pb-death-is-coming.wav",
+    "sonidos/177066__daughterofhades__creepy-ring-around-the-rosie.mp3",
+    "sonidos/186316__samararaine__nighttime-bonfire-1.wav",
+    "sonidos/223848__madamvicious__ghost-female-singing.wav",
+    "sonidos/241028__flashdeejay__dungeon-of-a-asylum.wav",
+    "sonidos/259264__mikkylachae__scream.wav"
+};
+
 //--------------------------------------------------------------
 FireTrails::FireTrails()
 {
@@ -75,6 +87,12 @@ FireTrails::FireTrails()
 
     light.setPosition(1000, 1000, 1000);
     
+    particleCount = 0;
+    
+    curSound = 0;
+    sndPlayer.loadSound(FILES[curSound]);
+    sndPlayer.play();
+
     //init();
    // setup();
 }
@@ -214,6 +232,7 @@ void FireTrails::fadeToColor(float r, float g, float b, float speed) {
 void FireTrails::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce) {
     float speed = vel.x * vel.x  + vel.y * vel.y * msa::getWindowAspectRatio() * msa::getWindowAspectRatio();    // balance the x and y components of speed with the screen aspect ratio
     if(speed > 0) {
+        particleCount++;
 		pos.x = ofClamp(pos.x, 0.0f, 1.0f);
 		pos.y = ofClamp(pos.y, 0.0f, 1.0f);
 		
@@ -262,6 +281,20 @@ void FireTrails::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addFor
 
 
 void FireTrails::fireUpdate(){
+    /* SOUND STUFF */
+    sndPlayer.setVolume(ofMap(particleCount, 100, 1000, 0, 1));
+    
+    if (!sndPlayer.getIsPlaying()){
+        sndPlayer.unloadSound();
+        curSound++;
+        if (curSound >= NO_SOUNDS)
+            curSound = 0;
+        sndPlayer.loadSound(FILES[curSound]);
+        sndPlayer.play();
+    }
+    
+    
+    /* FLUID STUFF */
 	if(resizeFluid) 	{
 		fluidSolver.setSize(fluidCellsX, fluidCellsX / msa::getWindowAspectRatio());
 		fluidDrawer.setup(&fluidSolver);
@@ -333,9 +366,18 @@ void FireTrails::fireDraw(){
     
 #ifdef USE_GUI
 	gui.draw();
+    
+    //ofDrawBitmapString("TOTAL Particles"+ofToString(particleCount), 300, 100);
+    
 #endif
 }
 
+void FireTrails::resetParticleCount(void){
+    particleCount = 0;
+}
+unsigned long FireTrails::getParticleCount(void){
+    return particleCount;
+}
 
 void FireTrails::keyPressed  (int key){
     switch(key) {

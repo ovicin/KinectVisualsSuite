@@ -453,6 +453,7 @@ void testApp::addFireForces()
         int counter = 0;
         int spacing = 30;
         int up = 1;
+        fireTrails.resetParticleCount();
         for(int y = 0; y < depthImg.getHeight(); y++)
         {
             for(int x = 0; x < depthImg.getWidth(); x++)
